@@ -1,0 +1,4 @@
+customer_id,cpf,monthly_income,credit_limit,credit_score,default_flag
+cst_001,123.456.789-00,5500,12000,720,0
+cst_002,987.654.321-00,3200,6000,640,1
+cst_003,456.789.123-99,9800,20000,810,0
