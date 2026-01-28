@@ -1,0 +1,10 @@
+[project]
+name = "agno-data-governance-agent"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "agno>=2.4.6",
+    "groq>=1.0.0",
+]
