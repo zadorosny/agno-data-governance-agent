@@ -4,6 +4,8 @@ Sistema multiagente baseado em IA para governança de dados sensíveis, com foco
 
 O projeto simula como fintechs, bancos e instituições financeiras podem utilizar agentes de IA para apoiar decisões de governança de dados, sem substituir controles humanos, cobrindo desde a identificação de PII até a geração de relatórios executivos de compliance.
 
+Feito utilizando o modelo de LLM llama-3.1-8b-instant, por meio do Groq Cloud (https://console.groq.com/home)
+
 ## Objetivo do Projeto
 
 Demonstrar, de forma prática e aplicada, como a IA pode apoiar processos de governança de dados em ambientes regulados, incluindo:
