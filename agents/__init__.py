@@ -1,8 +1,8 @@
-from agents.pii_detector import PIIDetectorAgent
+from agents.compliance_reporter import ComplianceReporterAgent
 from agents.data_classifier import DataClassifierAgent
 from agents.lineage_agent import LineageAgent
+from agents.pii_detector import PIIDetectorAgent
 from agents.policy_agent import PolicyAgent
-from agents.compliance_reporter import ComplianceReporterAgent
 
 __all__ = [
     "PIIDetectorAgent",

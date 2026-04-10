@@ -8,11 +8,11 @@ from pathlib import Path
 import pandas as pd
 from agno.models.message import Message
 
-from agents.pii_detector import PIIDetectorAgent
+from agents.compliance_reporter import ComplianceReporterAgent
 from agents.data_classifier import DataClassifierAgent
 from agents.lineage_agent import LineageAgent
+from agents.pii_detector import PIIDetectorAgent
 from agents.policy_agent import PolicyAgent
-from agents.compliance_reporter import ComplianceReporterAgent
 from config import DATA_DIR, REPORTS_DIR, get_logger
 from utils.json_parser import extract_json, normalize_pii_output
 

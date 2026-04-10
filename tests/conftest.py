@@ -2,9 +2,6 @@
 
 from __future__ import annotations
 
-import json
-from pathlib import Path
-
 import pandas as pd
 import pytest
 
@@ -71,7 +68,10 @@ def sample_report_input() -> dict:
         "dataset_risk": "high_risk",
         "lgpd_legal_basis": "obrigação legal/regulatória",
         "policies": {
-            "retention_policy": {"duration": 5, "description": "Retenção mínima exigida por regulamentação financeira."},
+            "retention_policy": {
+                "duration": 5,
+                "description": "Retenção mínima exigida por regulamentação financeira.",
+            },
             "masking_policy": {"cpf": "hashing SHA-256", "identificadores": "mascaramento parcial"},
             "access_policy": ["Equipe de Crédito", "Equipe de Risco", "Compliance"],
         },
