@@ -1,19 +1,15 @@
 from agno.agent import Agent
 from agno.models.groq import Groq
-#from agno.models.message import Message
 
-from dotenv import load_dotenv
-load_dotenv()
+from config import LLM_MODEL_ID, get_logger
 
-model = Groq(id="llama-3.1-8b-instant")
-
-print(">>> pii_detector.py carregado corretamente <<<")
+logger = get_logger(__name__)
 
 PIIDetectorAgent = Agent(
     name="PII Detector Agent",
-    model=model,
+    model=Groq(id=LLM_MODEL_ID),
     role="Detectar dados pessoais e financeiros sensíveis em datasets de crédito",
-    instructions="""
+    instructions="""\
 Você é um agente especializado em governança de dados para fintechs.
 
 Sua tarefa é analisar:
@@ -37,5 +33,7 @@ Cada item deve conter:
 - pii_category
 - risk_level (high, medium, low)
 - confidence (0 a 1)
-"""
+""",
 )
+
+logger.debug("pii_detector.py carregado")

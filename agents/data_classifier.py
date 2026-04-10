@@ -1,19 +1,15 @@
 from agno.agent import Agent
 from agno.models.groq import Groq
-from dotenv import load_dotenv
 
-load_dotenv()
+from config import LLM_MODEL_ID, get_logger
 
-# Modelo Groq
-model = Groq(id="llama-3.1-8b-instant")
-
-print(">>> data_classifier.py carregado corretamente <<<")
+logger = get_logger(__name__)
 
 DataClassifierAgent = Agent(
     name="Data Classifier Agent",
+    model=Groq(id=LLM_MODEL_ID),
     role="Classificar risco de datasets de crédito e definir base legal LGPD",
-    model=model,
-    instructions="""
+    instructions="""\
 Você é um agente especialista em governança de dados para fintechs.
 
 Você receberá:
@@ -46,5 +42,7 @@ Retorne SOMENTE um JSON válido no seguinte formato:
   "justification": "...",
   "allowed_use_cases": [...]
 }
-"""
+""",
 )
+
+logger.debug("data_classifier.py carregado")

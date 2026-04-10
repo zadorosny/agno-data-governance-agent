@@ -1,4 +1,4 @@
-agno
-groq
-python-dotenv
-pandas
+agno>=2.4.6
+groq>=1.0.0
+python-dotenv>=1.0.0
+pandas>=2.0.0

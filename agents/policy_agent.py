@@ -1,18 +1,15 @@
 from agno.agent import Agent
 from agno.models.groq import Groq
-from dotenv import load_dotenv
 
-load_dotenv()
+from config import LLM_MODEL_ID, get_logger
 
-model = Groq(id="llama-3.1-8b-instant")
-
-print(">>> policy_agent.py carregado corretamente <<<")
+logger = get_logger(__name__)
 
 PolicyAgent = Agent(
     name="Policy Agent",
+    model=Groq(id=LLM_MODEL_ID),
     role="Definir políticas de governança de dados para datasets de crédito",
-    model=model,
-    instructions="""
+    instructions="""\
 Você é um especialista em governança de dados e LGPD para fintechs.
 
 Você receberá:
@@ -34,5 +31,7 @@ Retorne SOMENTE um JSON válido no formato:
     "..."
   ]
 }
-"""
+""",
 )
+
+logger.debug("policy_agent.py carregado")

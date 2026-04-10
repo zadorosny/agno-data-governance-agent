@@ -24,58 +24,73 @@ O sistema é composto por agentes especializados, cada um com uma responsabilida
 
 Fluxo geral do sistema:
 
-Dataset de Crédito  
-→ PII Detector Agent  
-→ Data Classifier Agent (LGPD / Risco)  
-→ Lineage Agent (Linhagem de Dados)  
-→ Policy Agent (Políticas de Governança)  
+```
+Dataset de Crédito
+→ PII Detector Agent
+→ Data Classifier Agent (LGPD / Risco)
+→ Lineage Agent (Linhagem de Dados)
+→ Policy Agent (Políticas de Governança)
 → Compliance Reporter Agent (Relatório Executivo)
+```
+
+Para detalhes, consulte [docs/architecture.md](docs/architecture.md).
 
 ## Agentes Implementados
 
-PII Detector Agent  
-Responsável por identificar dados sensíveis por coluna, como CPF, identificadores de clientes, dados financeiros (renda, limite de crédito, score) e indicadores comportamentais (inadimplência).  
-Saída: classificação estruturada contendo tipo do dado, categoria, nível de risco e grau de confiança.
-
-Data Classifier Agent  
-Classifica o dataset como um todo, definindo nível de risco regulatório, base legal LGPD aplicável e casos de uso permitidos.  
-Objetivo: apoiar decisões sobre uso, tratamento e restrições do dataset.
-
-Lineage Agent  
-Descreve a linhagem dos dados, incluindo origem, transformações aplicadas, sistemas consumidores e pontos críticos de risco.  
-Uso típico: auditorias, análises de impacto e governança de dados.
-
-Policy Agent  
-Traduz risco regulatório em políticas acionáveis, como política de retenção, estratégias de mascaramento ou anonimização e controle de acesso por perfil.  
-Saída: políticas estruturadas prontas para aplicação operacional.
-
-Compliance Reporter Agent  
-Gera um relatório executivo em Markdown, voltado para gestores, áreas de risco, compliance e auditoria.  
-O relatório inclui resumo executivo, classificação de risco, base legal LGPD, principais riscos, políticas recomendadas e próximos passos, simulando entregáveis reais de ambientes regulados.
+| Agente | Responsabilidade |
+|---|---|
+| **PII Detector** | Identifica dados sensíveis por coluna (CPF, renda, score, inadimplência) |
+| **Data Classifier** | Classifica risco regulatório, base legal LGPD e casos de uso permitidos |
+| **Lineage Agent** | Mapeia origem, transformações, consumidores e riscos dos dados |
+| **Policy Agent** | Define políticas de retenção, mascaramento e controle de acesso |
+| **Compliance Reporter** | Gera relatório executivo em Markdown para gestores e auditoria |
 
 ## Como Executar
 
-Instalar dependências:
+### Pré-requisitos
 
-pip install -r requirements.txt```
+- Python >= 3.11
+- [uv](https://docs.astral.sh/uv/) (recomendado) ou pip
 
-Executar agentes individualmente (scripts executáveis e documentação viva):
+### Instalação
 
-python test_pii_detector.py
-python test_data_classifier.py
-python test_lineage_agent.py
-python test_policy_agent.py
-python test_compliance_reporter.py
+```bash
+# Clonar o repositório
+git clone https://github.com/zadorosny/agno-data-governance-agent.git
+cd agno-data-governance-agent
 
-Executar o pipeline completo de governança:
+# Copiar e configurar variáveis de ambiente
+cp .env.example .env
+# Editar .env com suas chaves de API
 
+# Instalar dependências (com uv)
+uv sync
+
+# Ou com pip
+pip install -r requirements.txt
+```
+
+### Executar o pipeline completo
+
+```bash
 python pipelines/credit_governance_pipeline.py
+```
+
+### Executar testes
+
+```bash
+# Testes unitários (não requerem API)
+pytest tests/test_json_parser.py -v
+
+# Testes de integração (requerem GROQ_API_KEY)
+pytest tests/ -m integration -v
+```
 
 ## Decisões Arquiteturais
 
-As respostas dos agentes não assumem saída perfeita do LLM. O parsing e a validação ocorrem na camada de consumo.
-A IA atua como suporte à governança e compliance, não como decisora final.
-Os arquivos test_*.py funcionam como exemplos de uso, testes de integração e documentação executável.
+- As respostas dos agentes não assumem saída perfeita do LLM. O parsing e a validação ocorrem na camada de consumo.
+- A IA atua como suporte à governança e compliance, não como decisora final.
+- Configuração centralizada em `config.py` para evitar valores hardcoded espalhados.
 
 ## Contexto de Uso
 
@@ -83,13 +98,11 @@ Projeto relevante para fintechs, bancos, instituições financeiras e times de d
 
 ## Possíveis Extensões
 
-Integração com catálogos de dados
-Validação automática de políticas
-Exportação de relatórios para PDF
-Integração com ferramentas de BI ou Data Governance
+- Integração com catálogos de dados
+- Validação automática de políticas
+- Exportação de relatórios para PDF
+- Integração com ferramentas de BI ou Data Governance
 
 ## Licença
 
-Projeto desenvolvido para fins educacionais e de portfólio.
-
-
+Projeto desenvolvido para fins educacionais e de portfólio. Licença MIT.
