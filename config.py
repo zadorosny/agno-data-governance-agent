@@ -14,8 +14,8 @@ REPORTS_DIR = PROJECT_ROOT / "reports"
 # --- LLM ---
 LLM_MODEL_ID: str = os.getenv("LLM_MODEL_ID", "llama-3.1-8b-instant")
 
-# --- Validação de variáveis obrigatórias ---
-GROQ_API_KEY: str = os.environ["GROQ_API_KEY"]
+# --- API Keys (validação lazy — falha apenas quando um agente tenta usar) ---
+GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
 
 # --- Logging ---
 LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
