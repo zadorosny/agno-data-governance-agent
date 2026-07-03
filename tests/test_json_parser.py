@@ -2,7 +2,7 @@
 
 import pytest
 
-from utils.json_parser import extract_json, normalize_pii_output
+from utils.json_parser import extract_json, extract_json_dict, normalize_pii_output
 
 
 class TestExtractJson:
@@ -27,12 +27,26 @@ class TestExtractJson:
             extract_json("texto sem json nenhum")
 
 
+class TestExtractJsonDict:
+    def test_returns_dict(self):
+        assert extract_json_dict('{"key": "value"}') == {"key": "value"}
+
+    def test_raises_on_list(self):
+        with pytest.raises(TypeError, match="Esperado objeto JSON"):
+            extract_json_dict('[{"a": 1}]')
+
+
 class TestNormalizePiiOutput:
     def test_filters_invalid_columns(self):
         raw = '[{"column": "cpf", "data_type": "PII"}, {"column": "fake_col", "data_type": "PII"}]'
         result = normalize_pii_output(raw, valid_columns=["cpf", "renda"])
         assert len(result) == 1
         assert result[0]["column"] == "cpf"
+
+    def test_filters_non_dict_items(self):
+        raw = '["cpf", {"column": "cpf", "data_type": "PII"}, 42]'
+        result = normalize_pii_output(raw, valid_columns=["cpf"])
+        assert result == [{"column": "cpf", "data_type": "PII"}]
 
     def test_raises_on_non_list(self):
         with pytest.raises(TypeError, match="Esperado lista"):

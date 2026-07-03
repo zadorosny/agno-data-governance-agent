@@ -50,6 +50,18 @@ def extract_json(raw_text: str) -> dict | list:
     )
 
 
+def extract_json_dict(raw_text: str) -> dict:
+    """Extrai JSON da resposta do LLM garantindo que o resultado seja um objeto (dict).
+
+    Raises:
+        TypeError: se o JSON extraído não for um objeto.
+    """
+    data = extract_json(raw_text)
+    if not isinstance(data, dict):
+        raise TypeError(f"Esperado objeto JSON do LLM, recebeu {type(data).__name__}")
+    return data
+
+
 def normalize_pii_output(raw_text: str, valid_columns: list[str]) -> list[dict]:
     """Extrai e filtra saída do PII Detector, mantendo apenas colunas existentes."""
     data = extract_json(raw_text)
@@ -57,7 +69,7 @@ def normalize_pii_output(raw_text: str, valid_columns: list[str]) -> list[dict]:
     if not isinstance(data, list):
         raise TypeError(f"Esperado lista do PII Detector, recebeu {type(data).__name__}")
 
-    filtered = [item for item in data if item.get("column") in valid_columns]
+    filtered = [item for item in data if isinstance(item, dict) and item.get("column") in valid_columns]
 
     removed = len(data) - len(filtered)
     if removed:
