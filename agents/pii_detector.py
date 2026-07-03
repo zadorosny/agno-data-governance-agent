@@ -1,9 +1,7 @@
 from agno.agent import Agent
 from agno.models.groq import Groq
 
-from config import LLM_MODEL_ID, get_logger
-
-logger = get_logger(__name__)
+from config import LLM_MODEL_ID
 
 PIIDetectorAgent = Agent(
     name="PII Detector Agent",
@@ -35,5 +33,3 @@ Cada item deve conter:
 - confidence (0 a 1)
 """,
 )
-
-logger.debug("pii_detector.py carregado")

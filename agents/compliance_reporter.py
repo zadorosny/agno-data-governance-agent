@@ -1,9 +1,7 @@
 from agno.agent import Agent
 from agno.models.groq import Groq
 
-from config import LLM_MODEL_ID, get_logger
-
-logger = get_logger(__name__)
+from config import LLM_MODEL_ID
 
 ComplianceReporterAgent = Agent(
     name="Compliance Reporter Agent",
@@ -29,5 +27,3 @@ Gere um relatório executivo em Markdown contendo:
 Use linguagem clara, objetiva e adequada para público não técnico.
 """,
 )
-
-logger.debug("compliance_reporter.py carregado")

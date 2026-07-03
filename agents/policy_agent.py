@@ -1,9 +1,7 @@
 from agno.agent import Agent
 from agno.models.groq import Groq
 
-from config import LLM_MODEL_ID, get_logger
-
-logger = get_logger(__name__)
+from config import LLM_MODEL_ID
 
 PolicyAgent = Agent(
     name="Policy Agent",
@@ -33,5 +31,3 @@ Retorne SOMENTE um JSON válido no formato:
 }
 """,
 )
-
-logger.debug("policy_agent.py carregado")
