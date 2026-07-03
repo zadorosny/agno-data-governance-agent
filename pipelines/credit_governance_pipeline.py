@@ -66,7 +66,9 @@ def run_credit_governance_pipeline(csv_path: str | Path) -> dict:
     policy_payload = {
         "dataset_risk": classification.get("dataset_risk"),
         "lgpd_legal_basis": classification.get("lgpd_legal_basis"),
-        "data_types": list({item.get("data_type") for item in pii_normalized}),
+        # sorted: ordem de iteração de set varia por processo (hash aleatório),
+        # o que tornava o prompt do Policy Agent não determinístico.
+        "data_types": sorted({item["data_type"] for item in pii_normalized if item.get("data_type")}),
     }
     policy_response = PolicyAgent.run(
         Message(role="user", content=json.dumps(policy_payload, ensure_ascii=False))
@@ -85,10 +87,13 @@ def run_credit_governance_pipeline(csv_path: str | Path) -> dict:
     report_response = ComplianceReporterAgent.run(
         Message(role="user", content=json.dumps(report_payload, ensure_ascii=False))
     )
+    report_content = report_response.content
+    if not isinstance(report_content, str) or not report_content.strip():
+        raise ValueError("Compliance Reporter não retornou conteúdo textual; relatório não foi gerado")
 
     REPORTS_DIR.mkdir(parents=True, exist_ok=True)
     report_path = REPORTS_DIR / "compliance_report.md"
-    report_path.write_text(report_response.content, encoding="utf-8")
+    report_path.write_text(report_content, encoding="utf-8")
     logger.info("Relatório salvo em %s", report_path)
 
     return {

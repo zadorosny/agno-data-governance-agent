@@ -42,6 +42,11 @@ class TestExtractJson:
         with pytest.raises(ValueError, match="Não foi possível extrair JSON"):
             extract_json("texto sem json nenhum")
 
+    def test_raises_on_none_content(self):
+        # RunOutput.content do agno é Optional[Any]
+        with pytest.raises(TypeError, match="sem conteúdo textual"):
+            extract_json(None)
+
 
 class TestExtractJsonDict:
     def test_returns_dict(self):
