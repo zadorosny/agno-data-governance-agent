@@ -22,6 +22,22 @@ class TestExtractJson:
         raw = 'Aqui está o resultado:\n{"key": "value"}\nFim.'
         assert extract_json(raw) == {"key": "value"}
 
+    def test_parse_nested_object_with_surrounding_text(self):
+        raw = 'Aqui está:\n{"policies": {"retention": {"duration": 5}}}\nFim.'
+        assert extract_json(raw) == {"policies": {"retention": {"duration": 5}}}
+
+    def test_parse_object_with_braces_inside_strings(self):
+        raw = 'Resultado: {"justification": "risco {alto} conforme LGPD"}'
+        assert extract_json(raw) == {"justification": "risco {alto} conforme LGPD"}
+
+    def test_parse_list_with_surrounding_text(self):
+        raw = 'Colunas sensíveis:\n[{"column": "cpf"}, {"column": "score"}]\nFim.'
+        assert extract_json(raw) == [{"column": "cpf"}, {"column": "score"}]
+
+    def test_prefers_payload_over_list_reference_in_text(self):
+        raw = 'Conforme [1], o resultado é {"key": "value"}.'
+        assert extract_json(raw) == {"key": "value"}
+
     def test_raises_on_invalid(self):
         with pytest.raises(ValueError, match="Não foi possível extrair JSON"):
             extract_json("texto sem json nenhum")

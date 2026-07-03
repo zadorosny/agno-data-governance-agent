@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import json
-import re
 
 from config import get_logger
 
@@ -13,10 +12,11 @@ logger = get_logger(__name__)
 def extract_json(raw_text: str) -> dict | list:
     """Extrai JSON de respostas LLM de forma robusta.
 
-    Tenta, em ordem:
-      1. Parse direto do texto limpo
-      2. Regex para objeto JSON ``{...}``
-      3. Regex para lista JSON ``[...]``
+    Tenta parse direto do texto limpo; se falhar, varre o texto com
+    ``json.JSONDecoder.raw_decode`` (que lida com aninhamento e chaves dentro
+    de strings, ao contrário de regex) e retorna o candidato válido mais longo
+    — o payload é sempre o maior trecho JSON, enquanto artefatos do texto ao
+    redor (ex.: referências "[1]") são curtos.
 
     Raises:
         ValueError: se nenhuma estratégia produzir JSON válido.
@@ -28,21 +28,19 @@ def extract_json(raw_text: str) -> dict | list:
     except json.JSONDecodeError:
         pass
 
-    obj_match = re.search(r"\{[\s\S]*?\}(?![\s\S]*\{)", cleaned)
-    if not obj_match:
-        obj_match = re.search(r"\{[\s\S]+\}", cleaned)
-    if obj_match:
-        try:
-            return json.loads(obj_match.group())
-        except json.JSONDecodeError:
-            logger.warning("Regex encontrou candidato a objeto JSON, mas parse falhou")
-
-    list_match = re.search(r"\[[\s\S]+\]", cleaned)
-    if list_match:
-        try:
-            return json.loads(list_match.group())
-        except json.JSONDecodeError:
-            logger.warning("Regex encontrou candidato a lista JSON, mas parse falhou")
+    decoder = json.JSONDecoder()
+    best: dict | list | None = None
+    best_length = 0
+    for i, char in enumerate(cleaned):
+        if char in "{[":
+            try:
+                value, end = decoder.raw_decode(cleaned, i)
+            except json.JSONDecodeError:
+                continue
+            if end - i > best_length:
+                best, best_length = value, end - i
+    if best is not None:
+        return best
 
     raise ValueError(
         f"Não foi possível extrair JSON válido da resposta do LLM. "
