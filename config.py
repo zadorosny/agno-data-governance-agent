@@ -16,7 +16,7 @@ REPORTS_DIR = PROJECT_ROOT / "reports"
 LLM_MODEL_ID: str = os.getenv("LLM_MODEL_ID", "llama-3.1-8b-instant")
 
 # --- Logging ---
-LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")
+LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO").upper()
 
 logging.basicConfig(
     level=LOG_LEVEL,
