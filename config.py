@@ -12,10 +12,8 @@ DATA_DIR = PROJECT_ROOT / "data"
 REPORTS_DIR = PROJECT_ROOT / "reports"
 
 # --- LLM ---
+# A GROQ_API_KEY é lida do ambiente diretamente pelo cliente Groq (via load_dotenv acima).
 LLM_MODEL_ID: str = os.getenv("LLM_MODEL_ID", "llama-3.1-8b-instant")
-
-# --- API Keys (validação lazy — falha apenas quando um agente tenta usar) ---
-GROQ_API_KEY: str = os.getenv("GROQ_API_KEY", "")
 
 # --- Logging ---
 LOG_LEVEL: str = os.getenv("LOG_LEVEL", "INFO")

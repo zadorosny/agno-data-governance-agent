@@ -1,9 +1,7 @@
 from agno.agent import Agent
 from agno.models.groq import Groq
 
-from config import LLM_MODEL_ID, get_logger
-
-logger = get_logger(__name__)
+from config import LLM_MODEL_ID
 
 DataClassifierAgent = Agent(
     name="Data Classifier Agent",
@@ -44,5 +42,3 @@ Retorne SOMENTE um JSON válido no seguinte formato:
 }
 """,
 )
-
-logger.debug("data_classifier.py carregado")
