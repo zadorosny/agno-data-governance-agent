@@ -51,6 +51,7 @@ agno-data-governance-agent/
 ├── tests/                   # Testes unitários e de integração (pytest)
 │   ├── conftest.py          # Fixtures compartilhados
 │   ├── test_json_parser.py  # Testes unitários (sem API)
+│   ├── test_pipeline.py     # Teste unitário do pipeline com agentes simulados (sem API)
 │   ├── test_pii_detector.py
 │   ├── test_data_classifier.py
 │   ├── test_lineage_agent.py
@@ -109,14 +110,18 @@ pip install -r requirements.txt
 | Variável | Obrigatória | Descrição |
 |---|---|---|
 | `GROQ_API_KEY` | Sim | Chave de API do Groq Cloud |
-| `TAVILY_API_KEY` | Não | Chave de API do Tavily (busca web) |
 | `LLM_MODEL_ID` | Não | Modelo LLM a usar (padrão: `llama-3.1-8b-instant`) |
 | `LOG_LEVEL` | Não | Nível de logging (padrão: `INFO`) |
 
 ### Executar o pipeline completo
 
+A partir da raiz do projeto:
+
 ```bash
-python pipelines/credit_governance_pipeline.py
+uv run python -m pipelines.credit_governance_pipeline
+
+# Ou, com o ambiente virtual ativado
+python -m pipelines.credit_governance_pipeline
 ```
 
 O pipeline executa os 5 agentes em sequência e salva o relatório de compliance em `reports/compliance_report.md`.
@@ -125,13 +130,13 @@ O pipeline executa os 5 agentes em sequência e salva o relatório de compliance
 
 ```bash
 # Testes unitários (não requerem API)
-pytest tests/test_json_parser.py -v
+pytest -m "not integration" -v
 
 # Testes de integração (requerem GROQ_API_KEY)
-pytest tests/ -m integration -v
+pytest -m integration -v
 
 # Todos os testes
-pytest tests/ -v
+pytest -v
 ```
 
 ## Decisões Arquiteturais
