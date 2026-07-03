@@ -122,9 +122,12 @@ uv run python -m pipelines.credit_governance_pipeline
 
 # Ou, com o ambiente virtual ativado
 python -m pipelines.credit_governance_pipeline
+
+# Opcionalmente, informe o caminho de outro dataset CSV
+python -m pipelines.credit_governance_pipeline caminho/para/dataset.csv
 ```
 
-O pipeline executa os 5 agentes em sequência e salva o relatório de compliance em `reports/compliance_report.md`.
+Sem argumento, o pipeline usa o dataset de exemplo `data/sample_credit_portfolio.csv`. O pipeline executa os 5 agentes em sequência e salva o relatório de compliance em `reports/compliance_report.md`.
 
 ### Executar testes
 
