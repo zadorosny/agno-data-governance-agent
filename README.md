@@ -128,6 +128,8 @@ O pipeline executa os 5 agentes em sequência e salva o relatório de compliance
 
 ### Executar testes
 
+Os testes requerem as dependências de desenvolvimento (pytest, ruff). Com uv: `uv sync --extra dev`. Com pip: `pip install pytest ruff`.
+
 ```bash
 # Testes unitários (não requerem API)
 pytest -m "not integration" -v
