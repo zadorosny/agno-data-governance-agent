@@ -14,7 +14,7 @@ from agents.lineage_agent import LineageAgent
 from agents.pii_detector import PIIDetectorAgent
 from agents.policy_agent import PolicyAgent
 from config import DATA_DIR, REPORTS_DIR, get_logger
-from utils.json_parser import extract_json, normalize_pii_output
+from utils.json_parser import extract_json_dict, normalize_pii_output
 
 logger = get_logger(__name__)
 
@@ -47,7 +47,7 @@ def run_credit_governance_pipeline(csv_path: str | Path) -> dict:
     classifier_response = DataClassifierAgent.run(
         Message(role="user", content=json.dumps(pii_normalized, ensure_ascii=False))
     )
-    classification = extract_json(classifier_response.content)
+    classification = extract_json_dict(classifier_response.content)
     logger.info("Classificação: %s", classification.get("dataset_risk", "N/A"))
 
     # --- 3. Linhagem de dados ---
@@ -59,7 +59,7 @@ def run_credit_governance_pipeline(csv_path: str | Path) -> dict:
     lineage_response = LineageAgent.run(
         Message(role="user", content=json.dumps(lineage_payload, ensure_ascii=False))
     )
-    lineage = extract_json(lineage_response.content)
+    lineage = extract_json_dict(lineage_response.content)
     logger.info("Linhagem mapeada: origem=%s", lineage.get("source", "N/A"))
 
     # --- 4. Políticas de governança ---
@@ -71,7 +71,7 @@ def run_credit_governance_pipeline(csv_path: str | Path) -> dict:
     policy_response = PolicyAgent.run(
         Message(role="user", content=json.dumps(policy_payload, ensure_ascii=False))
     )
-    policies = extract_json(policy_response.content)
+    policies = extract_json_dict(policy_response.content)
     logger.info("Políticas definidas")
 
     # --- 5. Relatório de compliance ---
