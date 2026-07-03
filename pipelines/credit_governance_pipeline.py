@@ -106,5 +106,8 @@ def run_credit_governance_pipeline(csv_path: str | Path) -> dict:
 
 
 if __name__ == "__main__":
-    result = run_credit_governance_pipeline(DATA_DIR / "sample_credit_portfolio.csv")
+    import sys
+
+    csv = Path(sys.argv[1]) if len(sys.argv) > 1 else DATA_DIR / "sample_credit_portfolio.csv"
+    result = run_credit_governance_pipeline(csv)
     print(json.dumps(result, indent=2, ensure_ascii=False))
