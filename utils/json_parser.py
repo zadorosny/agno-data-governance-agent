@@ -19,8 +19,14 @@ def extract_json(raw_text: str) -> dict | list:
     redor (ex.: referências "[1]") são curtos.
 
     Raises:
+        TypeError: se a resposta do LLM não tiver conteúdo textual.
         ValueError: se nenhuma estratégia produzir JSON válido.
     """
+    if not isinstance(raw_text, str):
+        # RunOutput.content do agno é Optional[Any]; sem este guard o erro é um
+        # AttributeError opaco em vez de apontar a resposta vazia do LLM.
+        raise TypeError(f"Resposta do LLM sem conteúdo textual (recebido {type(raw_text).__name__})")
+
     cleaned = raw_text.replace("```json", "").replace("```", "").strip()
 
     try:
